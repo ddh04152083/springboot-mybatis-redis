@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ddh.redis.mapper.ProductMapper">
+    <!-- 开启基于redis的二级缓存 -->
+    <cache type="com.ddh.redis.utils.RedisCache"/>
+    <select id="getOne" resultType="Product">
+        SELECT * FROM product WHERE id = #{id}
+    </select>
+    <insert id="update" parameterType="Product" flushCache="true">
+        UPDATE product SET name = #{name}, price = #{price} WHERE id = #{id}
+    </insert>
+<insert id="add">
+    insert into product(
+    <if test="id!=null and id !=0">
+        id,
+    </if>
+    <if test="name!=null">
+        name,
+    </if>
+    <if test="price!=null">
+        price
+    </if>
+    )
+    values (
+    <if test="id!=null and id !=0">
+        #{id},
+    </if>
+    <if test="name!=null">
+        #{name},
+    </if>
+    <if test="price!=null">
+        #{price}
+    </if>
+    )
+
+</insert>
+</mapper>
